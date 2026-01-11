@@ -3,6 +3,7 @@ import express from "express";
 
 const TOKEN = process.env.TG_BOT_KEY;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
+const DEBUG = process.env.DEBUG === "true";
 const BASE_URL = "https://cataas.com";
 const bot = new TelegramBot(TOKEN, { webHook: true });
 bot.setWebHook(`${WEBHOOK_URL}/bot${TOKEN}`);
@@ -32,6 +33,11 @@ const tags = {
 
 bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
+
+  if (DEBUG) {
+    console.log(`/start from ${chatId}`);
+  }
+
   bot.sendMessage(
     chatId,
     "Here are all available tags:\n" + "cataas.com/api/tags" + "\n\nUpload your cat!\ncataas.com/upload\n"
@@ -40,6 +46,10 @@ bot.onText(/\/start/, async (msg) => {
 
 bot.on("inline_query", (query) => {
   const userId = query.from.id;
+
+  if (DEBUG) {
+    console.log(`inline_query from ${userId}`);
+  }
 
   if (userTimers.has(userId)) {
     clearTimeout(userTimers.get(userId));
