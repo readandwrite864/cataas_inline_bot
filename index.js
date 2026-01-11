@@ -4,7 +4,7 @@ import express from "express";
 const TOKEN = process.env.TG_BOT_KEY;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
 const BASE_URL = "https://cataas.com";
-const bot = new TelegramBot(TOKEN, { polling: true });
+const bot = new TelegramBot(TOKEN, { webHook: true });
 bot.setWebHook(`${WEBHOOK_URL}/bot${TOKEN}`);
 
 // Per-user debounce storage
