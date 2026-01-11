@@ -1,8 +1,11 @@
 import TelegramBot from "node-telegram-bot-api";
+import express from "express";
 
 const TOKEN = process.env.TG_BOT_KEY;
+const WEBHOOK_URL = process.env.WEBHOOK_URL;
 const BASE_URL = "https://cataas.com";
 const bot = new TelegramBot(TOKEN, { polling: true });
+bot.setWebHook(`${WEBHOOK_URL}/bot${TOKEN}`);
 
 // Per-user debounce storage
 const userTimers = new Map();
@@ -100,3 +103,15 @@ async function handleInlineQuery(inlineQuery) {
     console.error("Inline Query Error:", error.message);
   }
 }
+
+const app = express();
+app.use(express.json());
+app.post(`/bot${TOKEN}`, (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Bot server running on port ${port}`);
+});

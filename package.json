@@ -5,6 +5,7 @@
     "start": "node --env-file=.env index.js"
   },
   "dependencies": {
+    "express": "^5.2.1",
     "node-telegram-bot-api": "^0.67.0"
   }
 }
